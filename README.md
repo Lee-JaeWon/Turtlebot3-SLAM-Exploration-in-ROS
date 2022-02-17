@@ -1,4 +1,4 @@
-# Turtlebot3_ROS_Exploration_gmapping
+# Turtlebot3-SLAM-Exploration-in-ROS
 
 ## Reference
 [Robotis/turtlebot3/sitmulation](https://emanual.robotis.com/docs/en/platform/turtlebot3/simulation/)<br>
