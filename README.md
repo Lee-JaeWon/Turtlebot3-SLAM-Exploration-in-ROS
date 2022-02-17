@@ -1,4 +1,4 @@
-# turtlebot3_ros_exploration
+# Turtlebot3_ROS_Exploration_gmapping
 
 ## Reference
 [Robotis/turtlebot3/sitmulation](https://emanual.robotis.com/docs/en/platform/turtlebot3/simulation/)<br>
