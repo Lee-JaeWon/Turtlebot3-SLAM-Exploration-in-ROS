@@ -1,9 +1,10 @@
 <launch>
 	<!-- Environment -->
-	<include file="$(find ros_slam_exploration)/launch/turtlebot3_house.launch"    />
+	<include file="$(find ros_slam_exploration)/launch/turtlebot3_house.launch">
+	</include>
 
 	<!-- SLAM_method -->
-	<include file="$(find turtlebot3_slam)/launch/turtlebot3_slam.launch">
+	<include file="$(find ros_slam_exploration)/launch/turtlebot3_slam.launch">
 		<arg name="slam_methods" value="gmapping"/>
 	</include>
 
@@ -11,9 +12,9 @@
 	<node pkg="explore_lite" type="explore" name="explore">
 		<remap from="costmap" to="map"/>
 	</node>
-
+	
 	<!-- move_base -->
-	<include file="$(find turtlebot3_navigation)/launch/move_base.launch"/>
+	<include file="$(find ros_slam_exploration)/launch/move_base.launch"/>
 </launch>
 
 
