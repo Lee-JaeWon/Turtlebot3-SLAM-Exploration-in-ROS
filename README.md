@@ -1,18 +1,21 @@
 # Turtlebot3-SLAM-Exploration-in-ROS
 
 ## 1. explore_lite with gmapping
-### Requirements
+### 1-1. Requirements
 ```
 $ sudo apt install ros-melodic-multirobot-map-merge ros-melodic-explore-lite
 ```
 
-### excute _ `.launch` file
+### 1-2. excute _ `.launch` file
 `roslaunch ros_slam_exploration explore_turtlebot3_fake.launch`<br>
 
-### Reference
+### 1-3. Reference
 [ROS : explore_lite](http://wiki.ros.org/explore_lite)<br>
 greedy frontier-based exploration
 
+<br><br>
+
+---
 ## Reference
 [Robotis/turtlebot3/sitmulation](https://emanual.robotis.com/docs/en/platform/turtlebot3/simulation/)<br>
 [https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git](https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git)
