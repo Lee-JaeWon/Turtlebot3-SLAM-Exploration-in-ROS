@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>ros_slam_exploration</name>
+  <name>Turtlebot3-SLAM-Exploration-in-ROS</name>
   <version>0.0.0</version>
-  <description>The ros_slam_exploration package</description>
+  <description>The Turtlebot3-SLAM-Exploration-in-ROS package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->

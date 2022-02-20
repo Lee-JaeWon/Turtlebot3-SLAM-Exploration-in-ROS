@@ -1,6 +1,8 @@
 <launch>
     <!-- Arguments -->
     <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+    <arg name="move_forward_only" default="false"/>
+
     <arg name="first_tb3"  default="tb3_0"/>
     <arg name="second_tb3" default="tb3_1"/>
     <arg name="third_tb3"  default="tb3_2"/>
@@ -8,12 +10,12 @@
     <arg name="first_tb3_x_pos" default="-7.0"/>
     <arg name="first_tb3_y_pos" default="-1.0"/>
     <arg name="first_tb3_z_pos" default=" 0.0"/>
-    <arg name="first_tb3_yaw"   default=" 1.57"/>
+    <arg name="first_tb3_yaw"   default=" 0.0"/>
 
     <arg name="second_tb3_x_pos" default=" 7.0"/>
     <arg name="second_tb3_y_pos" default="-1.0"/>
     <arg name="second_tb3_z_pos" default=" 0.0"/>
-    <arg name="second_tb3_yaw"   default=" 1.57"/>
+    <arg name="second_tb3_yaw"   default=" 0.0"/>
 
     <arg name="third_tb3_x_pos" default=" 0.5"/>
     <arg name="third_tb3_y_pos" default=" 3.0"/>
@@ -22,7 +24,7 @@
 
     <!-- Environment -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name" value="$(find ros_slam_exploration)/worlds/turtlebot3_house.world"/>
+        <arg name="world_name" value="$(find Turtlebot3-SLAM-Exploration-in-ROS)/worlds/turtlebot3_house.world"/>
         <arg name="paused" value="false"/>
         <arg name="use_sim_time" value="true"/>
         <arg name="gui" value="true"/>
@@ -66,7 +68,29 @@
     <!-- run the preset rviz -->
     <node name="rviz" pkg="rviz" type="rviz" args="-d /home/leejaewon/catkin_ws/src/Turtlebot3-SLAM-Exploration-in-ROS/rviz/multi_turtlebot3_slam.rviz" />
 
-    <!-- Gmapping -->
+    <!-- move_base -->
+    <include ns="$(arg first_tb3)" file="$(find Turtlebot3-SLAM-Exploration-in-ROS)/launch/multi_move_base.launch">
+        <arg name="model" value="$(arg model)" />
+        <arg name="move_forward_only" value="$(arg move_forward_only)"/>
+        <arg name="cmd_vel_topic" value="cmd_vel"/>
+        <arg name="namespace" value="$(arg first_tb3)"/>
+    </include>
+
+    <include ns="$(arg second_tb3)" file="$(find Turtlebot3-SLAM-Exploration-in-ROS)/launch/multi_move_base.launch">
+        <arg name="model" value="$(arg model)" />
+        <arg name="move_forward_only" value="$(arg move_forward_only)"/>
+        <arg name="cmd_vel_topic" value="cmd_vel"/>
+        <arg name="namespace" value="$(arg second_tb3)"/>
+    </include>
+
+    <include ns="$(arg third_tb3)" file="$(find Turtlebot3-SLAM-Exploration-in-ROS)/launch/multi_move_base.launch">
+        <arg name="model" value="$(arg model)" />
+        <arg name="move_forward_only" value="$(arg move_forward_only)"/>
+        <arg name="cmd_vel_topic" value="cmd_vel"/>
+        <arg name="namespace" value="$(arg third_tb3)"/>
+    </include>
+
+    <!-- Gmapping tb3_0 -->
     <node pkg="gmapping" type="slam_gmapping" name="turtlebot3_slam_gmapping" output="screen" ns="$(arg first_tb3)">
         <param name="base_frame" value="$(arg first_tb3)/base_footprint"/>
         <param name="odom_frame" value="$(arg first_tb3)/odom"/>
@@ -102,7 +126,7 @@
         <param name="lasamplestep" value="0.005"/>
     </node>
 
-    <!-- Gmapping -->
+    <!-- Gmapping tb3_1 -->
     <node pkg="gmapping" type="slam_gmapping" name="turtlebot3_slam_gmapping" output="screen" ns="$(arg second_tb3)">
         <param name="base_frame" value="$(arg second_tb3)/base_footprint"/>
         <param name="odom_frame" value="$(arg second_tb3)/odom"/>
@@ -138,7 +162,7 @@
         <param name="lasamplestep" value="0.005"/>
     </node>
 
-    <!-- Gmapping -->
+    <!-- Gmapping tb3_2 -->
     <node pkg="gmapping" type="slam_gmapping" name="turtlebot3_slam_gmapping" output="screen" ns="$(arg third_tb3)">
         <param name="base_frame" value="$(arg third_tb3)/base_footprint"/>
         <param name="odom_frame" value="$(arg third_tb3)/odom"/>
@@ -175,8 +199,41 @@
     </node>
 
     <!-- Multi Robot Map Merge -->
-    <include file="$(find ros_slam_exploration)/launch/multi_map_merge.launch">
-	</include>
+    <!-- http://wiki.ros.org/multirobot_map_merge -->
+    <group ns="$(arg first_tb3)/map_merge">
+        <param name="init_pose_x"   value="$(arg first_tb3_x_pos)"/>
+        <param name="init_pose_y"   value="$(arg first_tb3_y_pos)"/>
+        <param name="init_pose_z"   value="$(arg first_tb3_z_pos)"/>
+        <param name="init_pose_yaw" value="$(arg first_tb3_yaw)"  />
+    </group>
 
+    <group ns="$(arg second_tb3)/map_merge">
+        <param name="init_pose_x"   value="$(arg second_tb3_x_pos)"/>
+        <param name="init_pose_y"   value="$(arg second_tb3_y_pos)"/>
+        <param name="init_pose_z"   value="$(arg second_tb3_z_pos)"/>
+        <param name="init_pose_yaw" value="$(arg second_tb3_yaw)"  />
+    </group>
 
+    <group ns="$(arg third_tb3)/map_merge">
+        <param name="init_pose_x"   value="$(arg third_tb3_x_pos)"/>
+        <param name="init_pose_y"   value="$(arg third_tb3_y_pos)"/>
+        <param name="init_pose_z"   value="$(arg third_tb3_z_pos)"/>
+        <param name="init_pose_yaw" value="$(arg third_tb3_yaw)"  />
+    </group>
+
+    <node pkg="multirobot_map_merge" type="map_merge" respawn="false" name="map_merge" output="screen">
+        <param name="robot_map_topic" value="map"/>
+        <param name="robot_namespace" value="tb3"/>
+        <param name="merged_map_topic" value="map"/>
+        <param name="world_frame" value="map"/>
+        <param name="known_init_poses" value="true"/>
+        <param name="merging_rate" value="0.5"/>
+        <param name="discovery_rate" value="0.05"/>
+        <param name="estimation_rate" value="0.1"/>
+        <param name="estimation_confidence" value="1.0"/>
+    </node>
+
+    <node pkg="tf" type="static_transform_publisher" name="world_to_$(arg first_tb3)_tf_broadcaster"  args="0 0 0 0 0 0 /map /$(arg first_tb3)/map 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="world_to_$(arg second_tb3)_tf_broadcaster" args="0 0 0 0 0 0 /map /$(arg second_tb3)/map 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="world_to_$(arg third_tb3)_tf_broadcaster" args="0 0 0 0 0 0 /map /$(arg third_tb3)/map 100"/>
 </launch>
