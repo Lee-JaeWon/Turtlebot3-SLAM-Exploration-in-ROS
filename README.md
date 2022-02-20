@@ -6,14 +6,27 @@
 $ sudo apt install ros-melodic-multirobot-map-merge ros-melodic-explore-lite
 ```
 
-### 1-2. excute _ `.launch` file
-`roslaunch ros_slam_exploration explore_turtlebot3_fake.launch`<br>
+### 1-2. excute `.launch` file
+`roslaunch Turtlebot3-SLAM-Exploration-in-ROS explore_turtlebot3_fake.launch`<br>
 
 ### 1-3. Reference
 [ROS : explore_lite](http://wiki.ros.org/explore_lite)<br>
 greedy frontier-based exploration
 
 <br><br>
+
+## 2. Multi-Robot-SLAM (gmapping, explore_lite)
+### 2-1. Requirements
+```
+$ sudo apt install ros-melodic-multirobot-map-merge ros-melodic-explore-lite
+```
+### 2-2. excute `.launch` file
+`roslaunch Turtlebot3-SLAM-Exploration-in-ROS multi_tb3_mapping.launch`<br>
+`roslaunch Turtlebot3-SLAM-Exploration-in-ROS multi_explore.launch`<br>
+
+### 2-3. Reference
+[ROS : explore_lite](http://wiki.ros.org/explore_lite)<br>
+[GitHub : m-explore](https://github.com/hrnr/m-explore)<br>
 
 ---
 ## Reference
